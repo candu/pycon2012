@@ -1,1 +1,5 @@
 A collection of snippets, presentation stuff, etc. from US PyCon 2012 in Santa Clara, CA.
+
+To get started with this repo, you'll need to
+
+pip install xhpy django
