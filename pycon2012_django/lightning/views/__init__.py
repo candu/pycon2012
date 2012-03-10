@@ -10,6 +10,6 @@ def index(request):
     <ui:page title="PyCon 2012 - XHPy Lightning Talk">
         <h1>Hello PyCon!</h1>
         <h2>This page was built using XHPy.</h2>
-        <ui:list items={range(5)} />
+        <ui:list items={range(3)} />
     </ui:page>
     return HttpResponse(page)

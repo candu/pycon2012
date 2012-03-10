@@ -1,5 +1,4 @@
 from xhpy.pylib import *
-
 class :ui:list:oops2(:x:element):
     attribute list items
     def render(self):
