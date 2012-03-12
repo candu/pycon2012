@@ -1,6 +1,5 @@
 struct MemcacheGetResult {
-    1: string value,
-    2: bool found
+    1: optional string value,
 }
 
 service MemcacheService {

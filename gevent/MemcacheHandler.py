@@ -11,9 +11,7 @@ class MemcacheHandler:
         self._cache.update(data)
 
     def Get(self, key):
-        if key not in self._cache:
-            return MemcacheGetResult(value='', found=False)
-        return MemcacheGetResult(value=self._cache[key], found=True)
+        return MemcacheGetResult(value=self._cache.get(key))
 
     def MultiGet(self, keys):
         return dict((key, self.Get(key)) for key in keys)
