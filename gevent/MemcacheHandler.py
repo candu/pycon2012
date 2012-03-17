@@ -26,17 +26,22 @@ class CacheShard:
             for key in keys:
                 self._dict.pop(key)
 
+    def stats(self):
+        size = len(self._dict)
+        mem = sum(len(key) + len(value) for key, value in self._dict.iteritems())
+        return MemcacheStats(size=size, mem=mem)
+
+
 class Cache:
     def __init__(self, shards):
         self._shards = shards
-        self._shardMap = {}
+        self._shardMap = [CacheShard() for i in range(self._shards)]
 
     def _shardID(self, key):
         return hash(key) % self._shards
 
     def _shard(self, key):
-        # TODO: fix the race condition here
-        return self._shardMap.setdefault(self._shardID(key), CacheShard())
+        return self._shardMap[self._shardID(key)]
 
     def set(self, key, value):
         self._shard(key).set(key, value)
@@ -63,6 +68,14 @@ class Cache:
         for shard_id, shard_keys in keys_by_shard:
             self._shard(shard_id).purge(shard_keys)
 
+    def stats(self):
+        all_stats = MemcacheStats(size=0, mem=0)
+        for shard in self._shardMap:
+            shard_stats = shard.stats()
+            all_stats.size += shard_stats.size
+            all_stats.mem += shard_stats.mem
+        return all_stats
+
 
 class MemcacheHandler:
     def __init__(self):
@@ -85,3 +98,6 @@ class MemcacheHandler:
 
     def MultiDelete(self, keys):
         self._cache.purge(keys)
+
+    def Stats(self):
+        return self._cache.stats()
